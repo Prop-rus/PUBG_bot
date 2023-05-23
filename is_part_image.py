@@ -5,18 +5,10 @@ import matplotlib.pyplot as plt
 
 
 def is_part(img, template, thresh):
-    # img = cv2.imread(r'screenshots\full\main_menu.png',0)
-
-    # template = cv2.imread(r'screenshots\cut\start_game.png',0)
-
     w, h = template.shape[::-1]
-
-
     # Apply template Matching
     res = cv2.matchTemplate(img, template, cv2.TM_CCOEFF_NORMED)
-    # print('res', res)
     loc = np.where(res[::-1] >= thresh)
-
     is_there = False
     center_loc = None
     if loc[0].size > 0:
@@ -55,37 +47,3 @@ def is_part_color(img, template, thresh):
         center_loc = (max_loc[1] + w // 2, max_loc[0] + h // 2)
 
     return is_there, center_loc
-
-    # print(res.shape)
-    # print(loc)
-    # for pt in zip(*loc[::-1]):
-    #     cv2.rectangle(img, pt, (pt[0] + w, pt[1] + h), (0, 255, 255), 2)
-    # plt.imshow(img)
-    # plt.show()
-    # cv2.imshow('Detected', img)
-    # min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res[::-1])
-    # print(min_val, max_val, min_loc, max_loc)
-    # # If the method is TM_SQDIFF or TM_SQDIFF_NORMED, take minimum
-    # center_loc = (min_loc[0] - w//2, min_loc[1] + h//2)
-    # print(min_loc[0] - w//2, min_loc[1] + h//2)
-    # return True, center_loc
-#
-# is_part(cv2.imread(r'screenshots\full\main_menu.png',0),
-#         cv2.imread(r'screenshots\cut\start_game.png',0),
-#         0.99)
-
-# is_part(cv2.imread(r'screenshots\full\test.png',0),
-#         cv2.imread(r'screenshots\cut\start_game.png',0),
-#         0.99)
-
-
-# pg.moveTo(200,300, 0.5)
-
-# print(pg.position())
-
-# pg.leftClick(146,108)
-
-# imageObj = pg.screenshot()
-# cv_imageObj = cv2.cvtColor(np.array(imageObj), cv2.COLOR_RGB2BGR)
-# plt.imshow(cv_imageObj)
-# plt.show()

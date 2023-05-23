@@ -44,3 +44,5 @@ buttons_to_click = ['start_game', 'go_lobby_cut', 'confirm_cut',
                      'next_cut', 'finish_cut', 'reconnect_cut']
 
 tag = 'single'  # team or single
+
+TAKE_LAST_N_MEASUERS = 15
