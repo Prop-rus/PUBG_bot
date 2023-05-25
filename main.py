@@ -7,7 +7,7 @@ from configs.config import buttons_to_click, maps_to_glide
 from is_part_image import is_part
 from mouse_control import MouseControls
 from glider_actions import glider_actions
-from my_utils import search_f_key, define_map, take_screnshot, press_for_long
+from my_utils import search_f_key, define_map, take_screnshot, rescale_w, rescale_h
 
 
 from multiprocessing import Queue
@@ -16,8 +16,6 @@ import logging
 
 ms = MouseControls()
 pg.FAILSAFE = False
-
-w, h = 2560, 1440
 
 
 def car_actions(button_event, screenshots):
@@ -45,31 +43,30 @@ def detect_buttons(button_event, screenshots, queue):
             if is_there:
                 if but == 'go_lobby_cut':
                     print('confirm click')
-                    pg.leftClick(1125, 885, duration=1)
+                    pg.leftClick(rescale_w(1125), rescale_h(885), duration=1)
 
                 if but == 'start_game':
-                    pg.leftClick(2237, 54, duration=1)
-
-
-                    sleep(0.5)
-                    pg.leftClick(2427, 520, duration=0.3)
-                    pg.leftClick(2427, 520, duration=0.3)
+                    pg.leftClick(rescale_w(2237), rescale_h(54), duration=1)
 
                     sleep(0.5)
-                    pg.leftClick(2427, 720, duration=0.3)
-                    pg.leftClick(2427, 720, duration=0.3)
+                    for _ in range(2):
+                        pg.leftClick(rescale_w(2427), rescale_h(520), duration=0.3)
+
                     sleep(0.5)
-                    pg.leftClick(2427, 920, duration=0.3)
-                    pg.leftClick(2427, 920, duration=0.3)
+                    for _ in range(2):
+                        pg.leftClick(rescale_w(2427), rescale_h(720), duration=0.3)
                     sleep(0.5)
-                    pg.leftClick(2427, 1120, duration=0.3)
-                    pg.leftClick(2427, 1120, duration=0.3)
+                    for _ in range(2):
+                        pg.leftClick(rescale_w(2427), rescale_h(920), duration=0.3)
                     sleep(0.5)
-                    pg.leftClick(1275, 1000, duration=0.3)
-                    pg.leftClick(1275, 1000, duration=0.3)
+                    for _ in range(2):
+                        pg.leftClick(rescale_w(2427), rescale_h(1120), duration=0.3)
                     sleep(0.5)
-                    pg.leftClick(240, 1400, duration=0.3)
-                    pg.leftClick(240, 1400, duration=0.3)
+                    for _ in range(2):
+                        pg.leftClick(rescale_w(1275), rescale_h(1000), duration=0.3)
+                    sleep(0.5)
+                    for _ in range(2):
+                        pg.leftClick(rescale_w(240), rescale_h(1400), duration=0.3)
                 print(but, center)
                 print('button click', but)
                 pg.leftClick(center[0], center[1], duration=1)

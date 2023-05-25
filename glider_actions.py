@@ -5,7 +5,7 @@ import numpy as np
 import math
 from statistics import mean
 from configs.config import maps_to_glide, TAKE_LAST_N_MEASUERS
-from my_utils import take_screnshot, press_for_long, find_tag_new
+from my_utils import take_screnshot, press_for_long, find_tag_new, rescale_w, rescale_h
 from fly_over import fly_over
 from search_targets import main_search
 from collections import deque
@@ -48,9 +48,15 @@ def wait_and_jump(x, y, map_name,  screenshots):
         short = maps_destinations[map_name]['short']
         while too_far:
             print('wait and jump')
-            _, cv_imageObj1 = take_screnshot(region=(565,0, 1425, 1440))
+            _, cv_imageObj1 = take_screnshot(region=(rescale_w(565),
+                                                     rescale_h(0),
+                                                     rescale_w(1425),
+                                                     rescale_h(1440)))
             sleep(0.2)
-            _, cv_imageObj2 = take_screnshot(region=(565,0, 1425, 1440))
+            _, cv_imageObj2 = take_screnshot(region=(rescale_w(565),
+                                                     rescale_h(0),
+                                                     rescale_w(1425),
+                                                     rescale_h(1440)))
 
             diff = cv2.absdiff(cv_imageObj1, cv_imageObj2)
             threshold = cv2.threshold(diff, 25, 255, cv2.THRESH_BINARY)[1]
@@ -66,7 +72,7 @@ def wait_and_jump(x, y, map_name,  screenshots):
                 M = cv2.moments(c)
                 if M["m00"] == 0:
                     continue
-                cX = int(M["m10"] / M["m00"]) + 564
+                cX = int(M["m10"] / M["m00"]) + rescale_w(564)
                 cY = int(M["m01"] / M["m00"])
                 xses.append(cX)
                 yses.append(cY)
@@ -75,14 +81,13 @@ def wait_and_jump(x, y, map_name,  screenshots):
             if len(xses) > 0 and len(yses) > 0:
                 diff_x = abs(max(xses) - min(xses))
                 diff_y = abs(max(yses) - min(yses))
-                if diff_x < 50 and diff_y < 50:
+                if diff_x < rescale_w(50) and diff_y < rescale_h(50):
                     destination = math.sqrt((x - mean(xses)) ** 2 + (y - mean(yses)) ** 2)
                     destinations.append(destination)
                     appended_cnt += 1
                     print('desintaions', destinations, mean(destinations), x, y, xses, yses)
                     mean_dest = mean(destinations)
-                    if (((destination - mean_dest) > 10) or (mean_dest < short)) and appended_cnt > TAKE_LAST_N_MEASUERS:
-                        too_far = False
+                    if (((destination - mean_dest) > rescale_w(10)) or (mean_dest < short)) and appended_cnt > TAKE_LAST_N_MEASUERS:
                         print('need to jump')
                         press_for_long('m')
                         press_for_long('f')

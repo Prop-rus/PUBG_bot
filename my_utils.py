@@ -5,10 +5,27 @@ import numpy as np
 from time import sleep
 from configs.config import map_list
 import random
+from configs.config import w, h, steps_right, steps_back
+
+
+def rescale_w(coord):
+    '''
+    initially all coordinates were figured out on 2K resolution.
+    this will rescale to another defind resolution
+    '''
+    return (w * coord) // 2560
+
+def rescale_h(coord):
+    '''
+    initially all coordinates were figured out on 2K resolution.
+    this will rescale to another defind resolution
+    '''
+    return (h * coord) // 1440
+
 
 def find_tag_new(screenshots):
     print('find tag new start')
-    x1, x2, y1, y2 = 28, 51, 860, 1700
+    x1, x2, y1, y2 = rescale_w(28), rescale_w(51), rescale_h(860), rescale_h(1700)
 
     wide = 15
     segments_n = (y2 - y1) // wide
@@ -19,14 +36,15 @@ def find_tag_new(screenshots):
         for part in range(segments_n):
             ch = template[:, start:start + wide, :]
             res = define_color_new(ch)
-            if np.array_equal(res, np.array([33, 237, 251])):
+            yellow_pattern = [33, 237, 251]
+            if np.array_equal(res, np.array(yellow_pattern)):
                 pos = part
-                to_move = ((wide * pos - 420 + 5) * 1320) // 178
+                to_move = ((wide * pos - rescale_w(420) + 5) * rescale_w(1320)) // rescale_w(178)
                 ms.move_relative(to_move, 0)
                 break
             start += wide
         if pos == -1:
-            ms.move_relative(2632, 0)
+            ms.move_relative(rescale_w(2632), 0)
             sleep(0.8)
         else:
             break
@@ -59,7 +77,7 @@ def define_map(screenshots):
 def search_f_key(screenshots):
     cv_imageObj =  screenshots['gray']
     template = cv2.imread(r'screenshots\cut\jump_cut_mod.png', 0)
-    cv_imageObj = cv_imageObj[810: 865, 1420: 1534]
+    cv_imageObj = cv_imageObj[rescale_w(810): rescale_w(865), rescale_h(1420): rescale_h(1534)]
     is_there, center = is_part(cv_imageObj, template, 0.91)
     if is_there:
         print('F found')
@@ -100,8 +118,6 @@ def look_around(res_dict, event_list, ms):
 
 def steps_on_timing():
     print('steps_on_timing')
-    steps_right = 5
-    steps_back = 2
     sides_list = ['a', 'd']
     pg.keyDown('s')
     sleep(steps_back)
@@ -112,3 +128,5 @@ def steps_on_timing():
     pg.keyUp(toMove)
 
     print('steps end')
+
+

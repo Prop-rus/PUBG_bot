@@ -15,7 +15,6 @@ def is_part(img, template, thresh):
         is_there = True
         min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
         center_loc = (max_loc[0] + w//2, max_loc[1] + h//2)
-        # print(center_loc)
     return is_there, center_loc
 
 def is_part_color(img, template, thresh):

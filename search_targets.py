@@ -7,12 +7,11 @@ import numpy as np
 
 from is_part_image import is_part
 
-from my_utils import find_tag_new, define_color_new, stop, look_around, steps_on_timing,
+from my_utils import find_tag_new, define_color_new, stop, look_around, steps_on_timing, rescale_w, rescale_h
 
 from collections import deque
-from configs.config import gliders_or_cars
+from configs.config import gliders_or_cars, w, h
 
-w, h = 2560, 1440
 
 
 def search_vehicle(res_dict, event_list, screenshots, ms, vihicle_classes =[0,1,2,3,4]):
@@ -89,7 +88,7 @@ def press_f(res_dict, event_list, screenshots, map_name):
         if event_list['final'].is_set() or event_list['button'].is_set() :
             break
         screenshot = screenshots['color']
-        im_center = screenshot[810:865, 1420:1534, 0]
+        im_center = screenshot[rescale_w(810):rescale_w(865), rescale_h(1420):rescale_h(1534), 0]
         is_there, center = is_part(im_center, template, threshhold)
         if is_there:
             print('f found, checking')
@@ -116,7 +115,7 @@ def keep_tag(res_dict, event_list, screenshots):
     TAGS_TO_DEQ = 3
     tag_in = True
 
-    x1_close, x2_close, y1_close, y2_close = 28, 51, 1110, 1410
+    x1_close, x2_close, y1_close, y2_close = rescale_w(28), rescale_w(51), rescale_h(1110), rescale_h(1410)
     tags_list = deque(TAGS_TO_DEQ*[0], TAGS_TO_DEQ)
     sleep(5)
     tags_cnt = 0
@@ -176,7 +175,7 @@ def timing(res_dict, event_list):
     print(f"Process {current_process().name} finished")
 
 
-def coordinator(res_dict, event_list, screenshots):
+def coordinator(res_dict, event_list, screenshots, ms):
     print(f"Process {current_process().name} started")
     while not event_list['success'].is_set():
         if event_list['button'].is_set():
@@ -275,7 +274,7 @@ def main_search(button_event, screenshots, map_name, ms):
         keep_tag_cent_proc = Process(target=keep_tag, args=(res_dict, event_list, screenshots,), name='keep tag center')
         timing_proc = Process(target=timing, args=(res_dict, event_list,), name='timing')
         run_proc = Process(target=run, args=(res_dict, event_list,), name='run')
-        coord_proc = Process(target=coordinator, args=(res_dict, event_list, screenshots, ), name='coord')
+        coord_proc = Process(target=coordinator, args=(res_dict, event_list, screenshots,ms,  ), name='coord')
 
         processes.append(detection_proc)
         processes.append(f_proc)
@@ -295,7 +294,7 @@ def main_search(button_event, screenshots, map_name, ms):
 
         sleep(2)
         pg.press('f')
-        ms.move_relative(-1000, 0)
+        ms.move_relative(rescale_w(-1000), 0)
         pg.keyDown('shift')
         pg.keyDown('w')
         sleep(7)
