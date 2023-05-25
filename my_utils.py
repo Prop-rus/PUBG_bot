@@ -6,7 +6,9 @@ from time import sleep
 from configs.config import map_list
 import random
 from configs.config import w, h, steps_right, steps_back
+from mouse_control import MouseControls
 
+ms = MouseControls()
 
 def rescale_w(coord):
     '''
@@ -94,7 +96,7 @@ def stop():
     pg.keyUp('w')
 
 
-def look_around(res_dict, event_list, ms):
+def look_around(res_dict, event_list):
 
     moves = [20,50,100]
     for i in range(20):

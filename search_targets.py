@@ -11,10 +11,12 @@ from my_utils import find_tag_new, define_color_new, stop, look_around, steps_on
 
 from collections import deque
 from configs.config import gliders_or_cars, w, h
+from mouse_control import MouseControls
+
+ms = MouseControls()
 
 
-
-def search_vehicle(res_dict, event_list, screenshots, ms, vihicle_classes =[0,1,2,3,4]):
+def search_vehicle(res_dict, event_list, screenshots, vihicle_classes =[0,1,2,3,4]):
     print(f"Process {current_process().name} started")
     model = torch.hub.load('ultralytics/yolov5', 'custom', path='yolov5/runs/train/exp15/weights/best.pt',
                            force_reload=False)
@@ -175,7 +177,7 @@ def timing(res_dict, event_list):
     print(f"Process {current_process().name} finished")
 
 
-def coordinator(res_dict, event_list, screenshots, ms):
+def coordinator(res_dict, event_list, screenshots):
     print(f"Process {current_process().name} started")
     while not event_list['success'].is_set():
         if event_list['button'].is_set():
@@ -209,7 +211,7 @@ def coordinator(res_dict, event_list, screenshots, ms):
                 res_dict['run'] = False
                 stop()
                 res_dict['detect'] = False
-                look_around(res_dict, event_list, ms)
+                look_around(res_dict, event_list)
                 find_tag_new(screenshots)
                 sleep(0.6)
                 find_tag_new(screenshots)
@@ -236,7 +238,7 @@ def coordinator(res_dict, event_list, screenshots, ms):
     print(f"Process {current_process().name} finished")
 
 
-def main_search(button_event, screenshots, map_name, ms):
+def main_search(button_event, screenshots, map_name):
 
     if not button_event.is_set():
         final_end_event = Event()
@@ -268,13 +270,13 @@ def main_search(button_event, screenshots, map_name, ms):
         find_tag_new(screenshots)
     if not button_event.is_set():
         processes = []
-        detection_proc = Process(target=search_vehicle, args=(res_dict, event_list, screenshots, ms, ), name='search_vehicle')
+        detection_proc = Process(target=search_vehicle, args=(res_dict, event_list, screenshots, ), name='search_vehicle')
         f_proc = Process(target=always_f, args=(res_dict, event_list, ), name='always_f')
         pressed_f = Process(target=press_f, args=(res_dict, event_list, screenshots, map_name, ), name='pressed f&')
         keep_tag_cent_proc = Process(target=keep_tag, args=(res_dict, event_list, screenshots,), name='keep tag center')
         timing_proc = Process(target=timing, args=(res_dict, event_list,), name='timing')
         run_proc = Process(target=run, args=(res_dict, event_list,), name='run')
-        coord_proc = Process(target=coordinator, args=(res_dict, event_list, screenshots,ms,  ), name='coord')
+        coord_proc = Process(target=coordinator, args=(res_dict, event_list, screenshots, ), name='coord')
 
         processes.append(detection_proc)
         processes.append(f_proc)

@@ -10,9 +10,11 @@ from fly_over import fly_over
 from search_targets import main_search
 from collections import deque
 from configs.config import  maps_destinations, scrolled_coordinates
+from mouse_control import MouseControls
 
+ms = MouseControls()
 
-def mark_glider(map_name, ms):
+def mark_glider(map_name):
     print('mark glider')
     x, y = maps_to_glide[map_name]
     if map_name in scrolled_coordinates.keys():
@@ -99,12 +101,12 @@ def wait_and_jump(x, y, map_name,  screenshots):
 
 
 
-def glider_actions(map_name, button_event, screenshots, ms):
+def glider_actions(map_name, button_event, screenshots):
 
     print('start glider actions')
-    x, y = mark_glider(map_name, ms)
+    x, y = mark_glider(map_name)
 
     mean_dist = wait_and_jump(x, y, map_name, screenshots)
 
     fly_over(screenshots, mean_dist, map_name, button_event)
-    main_search(button_event, screenshots, map_name, ms)
+    main_search(button_event, screenshots, map_name)
