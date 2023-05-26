@@ -1,8 +1,21 @@
-from my_utils import rescale_w, rescale_h
+# from my_utils import rescale_w, rescale_h
 
 
 w, h = 2560, 1440
+# w, h = 1920, 1080
+def rescale_w(coord):
+    '''
+    initially all coordinates were figured out on 2K resolution.
+    this will rescale to another defind resolution
+    '''
+    return (w * coord) // 2560
 
+def rescale_h(coord):
+    '''
+    initially all coordinates were figured out on 2K resolution.
+    this will rescale to another defind resolution
+    '''
+    return (h * coord) // 1440
 map_list = ['vikendi', 'erangel', 'miramar', 'taego', 'sanok', 'deston', 'karakin']
 
 maps_to_glide = {'deston': (rescale_w(1036), rescale_h(542)),

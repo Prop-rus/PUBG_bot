@@ -1,7 +1,7 @@
 albumentations==1.3.0
 comet_ml==3.33.3
 coremltools==6.3.0
-Flask==2.3.2
+# Flask==2.3.2
 GitPython==3.1.31
 grequests==0.6.0
 ipython==8.13.2
@@ -27,9 +27,9 @@ requests==2.28.2
 scipy==1.7.3
 seaborn==0.12.2
 setuptools==67.0.0
-tensorflow==2.12.0
-tensorflowjs==4.6.0
-tensorrt==8.6.1
+#tensorflow==2.12.0
+#tensorflowjs==4.6.0
+#tensorrt==8.6.1
 tflite_runtime==2.12.0
 tflite_support==0.4.3
 thop==0.1.1.post2209072238

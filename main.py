@@ -1,3 +1,4 @@
+
 from multiprocessing import Process, Event, Manager, current_process
 from time import sleep
 import pyautogui as pg
@@ -39,8 +40,13 @@ def detect_buttons(button_event, screenshots, queue):
 
         for but in buttons_to_click:
             template = cv2.imread(fr'screenshots\cut\{but}.png', 0)
+            w_image, h_image = template.shape
+            w_image = rescale_w(w_image)
+            h_image = rescale_h(w_image)
+            template = cv2.resize(template, (w_image, h_image), interpolation=cv2.INTER_AREA)
             is_there, center = is_part(cv_imageObj, template, 0.99)
             if is_there:
+                print('is there button', but)
                 if but == 'go_lobby_cut':
                     print('confirm click')
                     pg.leftClick(rescale_w(1125), rescale_h(885), duration=1)
@@ -79,7 +85,7 @@ def detect_buttons(button_event, screenshots, queue):
     logger.info(f'Child {process.name} done.')
     print(f"buttons finished")
 
-def ingame_acting(button_event, screenshots, model_plane, queue):
+def ingame_acting(button_event, screenshots, queue):
     logger = logging.getLogger('app')
     logger.addHandler(QueueHandler(queue))
     logger.setLevel(logging.DEBUG)
@@ -96,7 +102,7 @@ def ingame_acting(button_event, screenshots, model_plane, queue):
         print(map_name)
         if map_name is not None and not button_event.is_set():
             if map_name in maps_to_glide.keys() and not button_event.is_set():
-                glider_actions(map_name, button_event, screenshots, ms)
+                glider_actions(map_name, button_event, screenshots)
             else:
                 car_actions(button_event, screenshots)
         else:
@@ -136,7 +142,7 @@ def logger_process(queue):
         logger.handle(message)
 
 
-def main(model_plane):
+def main():
     queue = Queue()
     logger = logging.getLogger('app')
     logger.addHandler(QueueHandler(queue))
@@ -155,7 +161,7 @@ def main(model_plane):
         screenshots['gray'] = gray
         screen_proc = Process(target=take_screenshot_always, args=(button_event, screenshots, queue,), name='take screens')
         detect_buttons_proc = Process(target=detect_buttons, args=(button_event, screenshots, queue, ), name='detect buttons')
-        ingame_proc = Process(target=ingame_acting, args=(button_event, screenshots, model_plane, queue, ), name='ingame acting')
+        ingame_proc = Process(target=ingame_acting, args=(button_event, screenshots, queue, ), name='ingame acting')
         processes.append(screen_proc)
         processes.append(detect_buttons_proc)
 

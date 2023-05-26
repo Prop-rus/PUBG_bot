@@ -18,7 +18,7 @@ ms = MouseControls()
 
 def search_vehicle(res_dict, event_list, screenshots, vihicle_classes =[0,1,2,3,4]):
     print(f"Process {current_process().name} started")
-    model = torch.hub.load('ultralytics/yolov5', 'custom', path='yolov5/runs/train/exp15/weights/best.pt',
+    model = torch.hub.load('ultralytics/yolov5', 'custom', path='best.pt',
                            force_reload=False)
     model.eval()
     model.cuda()

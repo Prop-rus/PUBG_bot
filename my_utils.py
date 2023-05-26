@@ -5,11 +5,12 @@ import numpy as np
 from time import sleep
 from configs.config import map_list
 import random
-from configs.config import w, h, steps_right, steps_back
+from configs.config import steps_right, steps_back
 from mouse_control import MouseControls
 
 ms = MouseControls()
-
+w, h = 2560, 1440
+# w, h = 1920, 1080
 def rescale_w(coord):
     '''
     initially all coordinates were figured out on 2K resolution.
@@ -79,6 +80,11 @@ def define_map(screenshots):
 def search_f_key(screenshots):
     cv_imageObj =  screenshots['gray']
     template = cv2.imread(r'screenshots\cut\jump_cut_mod.png', 0)
+
+    w_image, h_image = template.shape
+    w_image = rescale_w(w_image)
+    h_image = rescale_h(w_image)
+    template = cv2.resize(template, (w_image, h_image), interpolation=cv2.INTER_AREA)
     cv_imageObj = cv_imageObj[rescale_w(810): rescale_w(865), rescale_h(1420): rescale_h(1534)]
     is_there, center = is_part(cv_imageObj, template, 0.91)
     if is_there:
