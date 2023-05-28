@@ -5,7 +5,7 @@ import numpy as np
 import math
 from statistics import mean
 from configs.config import maps_to_glide, TAKE_LAST_N_MEASUERS
-from my_utils import take_screnshot, press_for_long, find_tag_new, rescale_w, rescale_h
+from my_utils import take_screenshot, press_for_long, find_tag_new, rescale_w, rescale_h
 from fly_over import fly_over
 from search_targets import main_search
 from collections import deque
@@ -54,12 +54,12 @@ def wait_and_jump(x, y, map_name,  screenshots):
         short = maps_destinations[map_name]['short']
         while too_far:
             print('wait and jump')
-            _, cv_imageObj1 = take_screnshot(region=(rescale_w(565),
+            _, cv_imageObj1 = take_screenshot(region=(rescale_w(565),
                                                      rescale_h(0),
                                                      rescale_w(1425),
                                                      rescale_h(1440)))
             sleep(0.2)
-            _, cv_imageObj2 = take_screnshot(region=(rescale_w(565),
+            _, cv_imageObj2 = take_screenshot(region=(rescale_w(565),
                                                      rescale_h(0),
                                                      rescale_w(1425),
                                                      rescale_h(1440)))

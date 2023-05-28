@@ -63,7 +63,7 @@ def find_tag_new(screenshots):
     print('find tag new finish')
 
 
-def take_screnshot(region=None):
+def take_screenshot(region=None):
     imageObj = pg.screenshot(region=region)
     color = cv2.cvtColor(np.array(imageObj), cv2.COLOR_RGB2BGR)
     gray = cv2.cvtColor(np.array(imageObj), cv2.COLOR_RGB2GRAY)
