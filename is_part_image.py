@@ -1,11 +1,9 @@
-import pyautogui as pg
 import cv2
 import numpy as np
-import matplotlib.pyplot as plt
 
 
 def is_part(img, template, thresh):
-    w, h = template.shape[::-1]
+    w_templ, h_templ = template.shape[::-1]
     # Apply template Matching
     res = cv2.matchTemplate(img, template, cv2.TM_CCOEFF_NORMED)
     loc = np.where(res[::-1] >= thresh)
@@ -14,7 +12,7 @@ def is_part(img, template, thresh):
     if loc[0].size > 0:
         is_there = True
         min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
-        center_loc = (max_loc[0] + w//2, max_loc[1] + h//2)
+        center_loc = (max_loc[0] + w_templ//2, max_loc[1] + h_templ//2)
     return is_there, center_loc
 
 def is_part_color(img, template, thresh):

@@ -8,9 +8,12 @@ import random
 from configs.config import steps_right, steps_back
 from mouse_control import MouseControls
 
+
 ms = MouseControls()
-w, h = 2560, 1440
-# w, h = 1920, 1080
+# w, h = 2560, 1440
+w, h = 1920, 1080
+
+
 def rescale_w(coord):
     '''
     initially all coordinates were figured out on 2K resolution.
@@ -24,6 +27,14 @@ def rescale_h(coord):
     this will rescale to another defind resolution
     '''
     return (h * coord) // 1440
+
+
+def rescale_template(template):
+    w_image, h_image = template.shape
+    w_image = rescale_w(w_image)
+    h_image = rescale_h(h_image)
+    template = cv2.resize(template, (h_image, w_image), interpolation=cv2.INTER_AREA)
+    return template
 
 
 def find_tag_new(screenshots):
@@ -71,6 +82,7 @@ def define_map(screenshots):
     scr =  screenshots['gray']
     for m in map_list:
         template = cv2.imread(rf'screenshots\maps\{m}.png', 0)
+        # template = rescale_template(template)
         is_there, _ = is_part(scr, template, 0.5)
         if is_there:
             print(f'map {m} detected')
@@ -85,8 +97,9 @@ def search_f_key(screenshots):
     w_image = rescale_w(w_image)
     h_image = rescale_h(w_image)
     template = cv2.resize(template, (w_image, h_image), interpolation=cv2.INTER_AREA)
+    # template = rescale_template(template)
     cv_imageObj = cv_imageObj[rescale_w(810): rescale_w(865), rescale_h(1420): rescale_h(1534)]
-    is_there, center = is_part(cv_imageObj, template, 0.91)
+    is_there, center = is_part(cv_imageObj, template, 0.6)
     if is_there:
         print('F found')
         return True

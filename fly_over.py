@@ -6,7 +6,7 @@ import cv2
 from is_part_image import is_part
 
 
-from my_utils import press_for_long, find_tag_new
+from my_utils import press_for_long, find_tag_new, rescale_template
 from configs.config import tag, maps_destinations
 
 
@@ -55,7 +55,8 @@ def detect_ground(event_list, screenshots):
     while True:
         cv_imageObj = screenshots['gray']
         template = cv2.imread(r'screenshots\cut\underwater_cut.png', 0)
-        is_there, center = is_part(cv_imageObj, template, 0.95)
+        # template = rescale_template(template)
+        is_there, center = is_part(cv_imageObj, template, 0.9)
         if is_there:
             print('water')
             pg.keyDown('space')
@@ -65,7 +66,8 @@ def detect_ground(event_list, screenshots):
             break
 
         template = cv2.imread(r'screenshots\cut\stand_cut.png', 0)
-        is_there, center = is_part(cv_imageObj, template, 0.95)
+        # template = rescale_template(template)
+        is_there, center = is_part(cv_imageObj, template, 0.9)
         if is_there:
             print('ground')
             event_list['ground'].set()

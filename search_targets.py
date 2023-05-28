@@ -7,7 +7,7 @@ import numpy as np
 
 from is_part_image import is_part
 
-from my_utils import find_tag_new, define_color_new, stop, look_around, steps_on_timing, rescale_w, rescale_h
+from my_utils import find_tag_new, define_color_new, stop, look_around, steps_on_timing, rescale_w, rescale_h, rescale_template
 
 from collections import deque
 from configs.config import gliders_or_cars, w, h
@@ -85,16 +85,18 @@ def press_f(res_dict, event_list, screenshots, map_name):
         threshhold = 0.5
 
     fake_template_1 = cv2.imread(r'screenshots\cut\open_door_cut.png', 0)
+    # fake_template_1 = rescale_template(fake_template_1)
 
     while not found_f:
         if event_list['final'].is_set() or event_list['button'].is_set() :
             break
         screenshot = screenshots['color']
         im_center = screenshot[rescale_w(810):rescale_w(865), rescale_h(1420):rescale_h(1534), 0]
+        # template = rescale_template(template)
         is_there, center = is_part(im_center, template, threshhold)
         if is_there:
             print('f found, checking')
-            is_there, center = is_part(im_center, fake_template_1, 0.9)
+            is_there, center = is_part(im_center, fake_template_1, 0.85)
             if not is_there:
                 print('f confirmed')
                 res_dict['success'] = True

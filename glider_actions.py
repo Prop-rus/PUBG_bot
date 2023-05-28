@@ -17,8 +17,12 @@ ms = MouseControls()
 def mark_glider(map_name):
     print('mark glider')
     x, y = maps_to_glide[map_name]
+    x = rescale_w(x)
+    y = rescale_h(y)
     if map_name in scrolled_coordinates.keys():
         new_x, new_y = scrolled_coordinates[map_name]
+        new_x = rescale_w(new_x)
+        new_y = rescale_h(new_y)
         ms.move(x, y)
         sleep(0.5)
         for _ in range(4):

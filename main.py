@@ -8,7 +8,7 @@ from configs.config import buttons_to_click, maps_to_glide
 from is_part_image import is_part
 from mouse_control import MouseControls
 from glider_actions import glider_actions
-from my_utils import search_f_key, define_map, take_screnshot, rescale_w, rescale_h
+from my_utils import search_f_key, define_map, take_screnshot, rescale_w, rescale_h, rescale_template
 
 
 from multiprocessing import Queue
@@ -40,11 +40,8 @@ def detect_buttons(button_event, screenshots, queue):
 
         for but in buttons_to_click:
             template = cv2.imread(fr'screenshots\cut\{but}.png', 0)
-            w_image, h_image = template.shape
-            w_image = rescale_w(w_image)
-            h_image = rescale_h(w_image)
-            template = cv2.resize(template, (w_image, h_image), interpolation=cv2.INTER_AREA)
-            is_there, center = is_part(cv_imageObj, template, 0.99)
+            # template = rescale_template(template)
+            is_there, center = is_part(cv_imageObj, template, 0.95)
             if is_there:
                 print('is there button', but)
                 if but == 'go_lobby_cut':
