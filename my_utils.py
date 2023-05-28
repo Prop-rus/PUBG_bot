@@ -7,24 +7,22 @@ from configs.config import map_list
 import random
 from configs.config import steps_right, steps_back
 from mouse_control import MouseControls
-
+from configs.resolution_conf import w, h
 
 ms = MouseControls()
-# w, h = 2560, 1440
-w, h = 1920, 1080
 
 
 def rescale_w(coord):
     '''
     initially all coordinates were figured out on 2K resolution.
-    this will rescale to another defind resolution
+    this will rescale to another defined resolution
     '''
     return (w * coord) // 2560
 
 def rescale_h(coord):
     '''
     initially all coordinates were figured out on 2K resolution.
-    this will rescale to another defind resolution
+    this will rescale to another defined resolution
     '''
     return (h * coord) // 1440
 
@@ -97,7 +95,6 @@ def search_f_key(screenshots):
     w_image = rescale_w(w_image)
     h_image = rescale_h(w_image)
     template = cv2.resize(template, (w_image, h_image), interpolation=cv2.INTER_AREA)
-    # template = rescale_template(template)
     cv_imageObj = cv_imageObj[rescale_w(810): rescale_w(865), rescale_h(1420): rescale_h(1534)]
     is_there, center = is_part(cv_imageObj, template, 0.6)
     if is_there:

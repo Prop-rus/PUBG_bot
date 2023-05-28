@@ -6,8 +6,8 @@ import cv2
 from is_part_image import is_part
 
 
-from my_utils import press_for_long, find_tag_new, rescale_template
-from configs.config import tag, maps_destinations
+from my_utils import press_for_long, find_tag_new
+from configs.config import maps_destinations
 
 
 def forward_and_detect_tag(event_list,  mean_dist, map_name):

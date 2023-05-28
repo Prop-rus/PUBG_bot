@@ -7,7 +7,7 @@ import numpy as np
 
 from is_part_image import is_part
 
-from my_utils import find_tag_new, define_color_new, stop, look_around, steps_on_timing, rescale_w, rescale_h, rescale_template
+from my_utils import find_tag_new, define_color_new, stop, look_around, steps_on_timing, rescale_w, rescale_h
 
 from collections import deque
 from configs.config import gliders_or_cars, w, h
@@ -82,7 +82,7 @@ def press_f(res_dict, event_list, screenshots, map_name):
         threshhold = 0.65
     else:
         template = cv2.imread(r'screenshots\cut\press_f_glider_cut.png', 0)
-        threshhold = 0.5
+        threshhold = 0.45
 
     fake_template_1 = cv2.imread(r'screenshots\cut\open_door_cut.png', 0)
     # fake_template_1 = rescale_template(fake_template_1)
