@@ -13,21 +13,41 @@ ms = MouseControls()
 
 
 def rescale_w(coord):
-    '''
-    initially all coordinates were figured out on 2K resolution.
-    this will rescale to another defined resolution
-    '''
+    """
+    Rescale the width coordinate from a 2K resolution to another defined resolution.
+
+    Args:
+        coord (int): The coordinate to rescale.
+
+    Returns:
+        int: The rescaled coordinate.
+    """
     return (w * coord) // 2560
 
+
 def rescale_h(coord):
-    '''
-    initially all coordinates were figured out on 2K resolution.
-    this will rescale to another defined resolution
-    '''
+    """
+    Rescale the height coordinate from a 2K resolution to another defined resolution.
+
+    Args:
+        coord (int): The coordinate to rescale.
+
+    Returns:
+        int: The rescaled coordinate.
+    """
     return (h * coord) // 1440
 
 
 def rescale_template(template):
+    """
+    Rescale the template image to match a defined resolution.
+
+    Args:
+        template (numpy.ndarray): The template image.
+
+    Returns:
+        numpy.ndarray: The rescaled template image.
+    """
     w_image, h_image = template.shape
     w_image = rescale_w(w_image)
     h_image = rescale_h(h_image)
@@ -36,6 +56,15 @@ def rescale_template(template):
 
 
 def find_tag_new(screenshots):
+    """
+    Find the tag in a screenshot using template matching.
+
+    Args:
+        screenshots (dict): A dictionary containing color and gray screenshots.
+
+    Returns:
+        None
+    """
     print('find tag new start')
     x1, x2, y1, y2 = rescale_w(28), rescale_w(51), rescale_h(860), rescale_h(1700)
 
@@ -64,31 +93,69 @@ def find_tag_new(screenshots):
 
 
 def take_screenshot(region=None):
+    """
+    Take a screenshot of the specified region.
+
+    Args:
+        region (tuple): The coordinates of the region to capture. Default is None to capture the entire screen.
+
+    Returns:
+        tuple: A tuple containing the color and gray versions of the screenshot.
+    """
     imageObj = pg.screenshot(region=region)
     color = cv2.cvtColor(np.array(imageObj), cv2.COLOR_RGB2BGR)
     gray = cv2.cvtColor(np.array(imageObj), cv2.COLOR_RGB2GRAY)
     return color, gray
 
-def press_for_long(button, dalay=0.3):
+
+def press_for_long(button, delay=0.3):
+    """
+    Simulate pressing and holding a keyboard button.
+
+    Args:
+        button (str): The button to press.
+        delay (float): The duration to hold the button. Default is 0.3 seconds.
+
+    Returns:
+        None
+    """
     pg.keyDown(button)
-    sleep(dalay)
+    sleep(delay)
     pg.keyUp(button)
 
 
 def define_map(screenshots):
+    """
+    Find the current map in the screenshots using template matching.
+
+    Args:
+        screenshots (dict): A dictionary containing color and gray screenshots.
+
+    Returns:
+        str: The name of the detected map, or None if no map is detected.
+    """
     press_for_long('m', 0.5)
-    scr =  screenshots['gray']
+    scr = screenshots['gray']
     for m in map_list:
         template = cv2.imread(rf'screenshots\maps\{m}.png', 0)
-        # template = rescale_template(template)
         is_there, _ = is_part(scr, template, 0.5)
         if is_there:
             print(f'map {m} detected')
             return m
     return None
 
+
 def search_f_key(screenshots):
-    cv_imageObj =  screenshots['gray']
+    """
+    Search for the 'F' key in a region of the screenshot using template matching.
+
+    Args:
+        screenshots (dict): A dictionary containing color and gray screenshots.
+
+    Returns:
+        bool: True if the 'F' key is found, False otherwise.
+    """
+    cv_imageObj = screenshots['gray']
     template = cv2.imread(r'screenshots\cut\jump_cut_mod.png', 0)
 
     w_image, h_image = template.shape
@@ -103,18 +170,42 @@ def search_f_key(screenshots):
 
 
 def define_color_new(image):
+    """
+    Define the dominant color in an image.
+
+    Args:
+        image (numpy.ndarray): The input image.
+
+    Returns:
+        numpy.ndarray: The dominant color.
+    """
     colors, count = np.unique(image.reshape(-1, image.shape[-1]), axis=0, return_counts=True)
     return colors[count.argmax()]
 
 
 def stop():
+    """
+    Release the 'l' and 'w' keys.
+
+    Returns:
+        None
+    """
     pg.keyUp('l')
     pg.keyUp('w')
 
 
 def look_around(res_dict, event_list):
+    """
+    Perform a sequence of movements to look around and detect the tag.
 
-    moves = [20,50,100]
+    Args:
+        res_dict (dict): A dictionary to store the detection result.
+        event_list (dict): A dictionary of event flags.
+
+    Returns:
+        None
+    """
+    moves = [20, 50, 100]
     for i in range(20):
         if event_list['detected'].is_set() or event_list['final'].is_set():
             return
@@ -123,18 +214,25 @@ def look_around(res_dict, event_list):
     pg.keyDown('w')
     sleep(4)
     pg.keyUp('w')
-    if event_list['detected'].is_set()  or event_list['final'].is_set():
+    if event_list['detected'].is_set() or event_list['final'].is_set():
         return
     ms.move_relative(random.choice(moves), 0)
     pg.keyDown('a')
     sleep(1)
     pg.keyUp('a')
-    if event_list['detected'].is_set()  or event_list['final'].is_set():
+    if event_list['detected'].is_set() or event_list['final'].is_set():
         return
     res_dict['tag_in'] = True
     event_list['tag_in'].clear()
 
+
 def steps_on_timing():
+    """
+    Perform a sequence of steps on timing.
+
+    Returns:
+        None
+    """
     print('steps_on_timing')
     sides_list = ['a', 'd']
     pg.keyDown('s')
@@ -146,5 +244,3 @@ def steps_on_timing():
     pg.keyUp(toMove)
 
     print('steps end')
-
-

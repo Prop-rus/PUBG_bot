@@ -4,13 +4,22 @@ import pyautogui as pg
 import cv2
 
 from is_part_image import is_part
-
-
 from my_utils import press_for_long, find_tag_new
 from configs.config import maps_destinations
 
 
-def forward_and_detect_tag(event_list,  mean_dist, map_name):
+def forward_and_detect_tag(event_list, mean_dist, map_name):
+    """
+    Move forward and detect tags during the flight.
+
+    Args:
+        event_list (dict): Dictionary containing event flags.
+        mean_dist (float): Mean distance to the destination.
+        map_name (str): Name of the map.
+
+    Returns:
+        None
+    """
     print(f"Process {current_process().name} started")
     short = maps_destinations[map_name]['short']
     long = maps_destinations[map_name]['long']
@@ -19,7 +28,6 @@ def forward_and_detect_tag(event_list,  mean_dist, map_name):
             pg.keyDown('w')
             sleep(0.5)
     if mean_dist > short and mean_dist <= long:
-
         pg.keyDown('w')
         print('parachute')
         sleep(7)
@@ -50,6 +58,16 @@ def forward_and_detect_tag(event_list,  mean_dist, map_name):
 
 
 def detect_ground(event_list, screenshots):
+    """
+    Detect whether the character is on the ground or in the water.
+
+    Args:
+        event_list (dict): Dictionary containing event flags.
+        screenshots (multiprocessing.Manager.dict): Shared dictionary for storing screenshots.
+
+    Returns:
+        None
+    """
     print(f"Process {current_process().name} started")
 
     while True:
@@ -76,7 +94,18 @@ def detect_ground(event_list, screenshots):
 
 
 def fly_over(screenshots, mean_dist, map_name, button_event):
+    """
+    Perform flying actions during the flight.
 
+    Args:
+        screenshots (multiprocessing.Manager.dict): Shared dictionary for storing screenshots.
+        mean_dist (float): Mean distance to the destination.
+        map_name (str): Name of the map.
+        button_event (multiprocessing.Event): Event to signal the detection of a button.
+
+    Returns:
+        None
+    """
     print('fly over start')
 
     processes_fly = []
@@ -89,8 +118,8 @@ def fly_over(screenshots, mean_dist, map_name, button_event):
 
     find_tag_new(screenshots)
     event_list = {'ground': grounded_event, 'keep_tag': keep_tag_event, 'button': button_event}
-    detect_tag_proc = Process(target=forward_and_detect_tag, args=(event_list,  mean_dist, map_name, ), name='forw and detect')
-    detect_ground_proc = Process(target=detect_ground, args=(event_list, screenshots, ), name='ground')
+    detect_tag_proc = Process(target=forward_and_detect_tag, args=(event_list, mean_dist, map_name,), name='forw and detect')
+    detect_ground_proc = Process(target=detect_ground, args=(event_list, screenshots,), name='ground')
     processes_fly.append(detect_tag_proc)
     processes_fly.append(detect_ground_proc)
     for p in processes_fly:

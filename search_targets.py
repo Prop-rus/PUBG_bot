@@ -6,9 +6,7 @@ import torch
 import numpy as np
 
 from is_part_image import is_part
-
 from my_utils import find_tag_new, define_color_new, stop, look_around, steps_on_timing, rescale_w, rescale_h
-
 from collections import deque
 from configs.config import gliders_or_cars, w, h
 from mouse_control import MouseControls
@@ -16,10 +14,18 @@ from mouse_control import MouseControls
 ms = MouseControls()
 
 
-def search_vehicle(res_dict, event_list, screenshots, vihicle_classes =[0,1,2,3,4]):
+def search_vehicle(res_dict, event_list, screenshots, vehicle_classes=[0, 1, 2, 3, 4]):
+    """
+    Search for vehicles in the screenshots using YOLOv5 model.
+
+    Args:
+        res_dict (dict): Shared dictionary for storing the results.
+        event_list (dict): Shared dictionary for managing events.
+        screenshots (dict): Dictionary containing the screenshots.
+        vehicle_classes (list): List of vehicle classes to detect.
+    """
     print(f"Process {current_process().name} started")
-    model = torch.hub.load('ultralytics/yolov5', 'custom', path='best.pt',
-                           force_reload=False)
+    model = torch.hub.load('ultralytics/yolov5', 'custom', path='best.pt', force_reload=False)
     model.eval()
     model.cuda()
     model.imgsz = (1280, 1280)
@@ -27,7 +33,7 @@ def search_vehicle(res_dict, event_list, screenshots, vihicle_classes =[0,1,2,3,
     model.max_det = 1
     model.conf_thres = 0.6
     model.iou_thres = 0.6
-    model.classes = vihicle_classes  # car, motorcycle, bus, truck
+    model.classes = vehicle_classes  # car, motorcycle, bus, truck
     cur_x, cur_y = w // 2, h // 2
     success = False
     success_cnt = 0
@@ -41,7 +47,7 @@ def search_vehicle(res_dict, event_list, screenshots, vihicle_classes =[0,1,2,3,
         results = model(screenshot.copy())
         labels, cord = results.xyxyn[0][:, -1].cpu().numpy(), results.xyxyn[0][:, :-1].cpu().numpy()
         confidence = results.xyxyn[0][:, -2].cpu().numpy()
-        ind_cars = np.where(np.isin(labels, vihicle_classes))
+        ind_cars = np.where(np.isin(labels, vehicle_classes))
 
         labels = labels[ind_cars]
         cord = cord[ind_cars]
@@ -67,6 +73,13 @@ def search_vehicle(res_dict, event_list, screenshots, vihicle_classes =[0,1,2,3,
 
 
 def always_f(res_dict, event_list):
+    """
+    Continuously press the 'f' key.
+
+    Args:
+        res_dict (dict): Shared dictionary for storing the results.
+        event_list (dict): Shared dictionary for managing events.
+    """
     print(f"Process {current_process().name} started")
     while not event_list['success'].is_set():
         pg.press('f')
@@ -75,6 +88,15 @@ def always_f(res_dict, event_list):
 
 
 def press_f(res_dict, event_list, screenshots, map_name):
+    """
+    Press the 'f' key when a specific condition is met.
+
+    Args:
+        res_dict (dict): Shared dictionary for storing the results.
+        event_list (dict): Shared dictionary for managing events.
+        screenshots (dict): Dictionary containing the screenshots.
+        map_name (str): Name of the map being played.
+    """
     print(f"Process {current_process().name} started")
     found_f = False
     if gliders_or_cars[map_name] == 'car':
@@ -106,21 +128,36 @@ def press_f(res_dict, event_list, screenshots, map_name):
         sleep(0.1)
     print(f"Process {current_process().name} finished")
 
-def duck_and_f(res_dict):
 
+def duck_and_f(res_dict):
+    """
+    Press and release the 'ctrl' key twice.
+
+    Args:
+        res_dict (dict): Shared dictionary for storing the results.
+    """
     pg.press('ctrl')
     res_dict['duck'] = True
     sleep(4)
     pg.press('ctrl')
     res_dict['duck'] = False
 
+
 def keep_tag(res_dict, event_list, screenshots):
+    """
+    Monitor the presence of a tag in a specific region of the screen.
+
+    Args:
+        res_dict (dict): Shared dictionary for storing the results.
+        event_list (dict): Shared dictionary for managing events.
+        screenshots (dict): Dictionary containing the screenshots.
+    """
     print(f"Process {current_process().name} started")
     TAGS_TO_DEQ = 3
     tag_in = True
 
     x1_close, x2_close, y1_close, y2_close = rescale_w(28), rescale_w(51), rescale_h(1110), rescale_h(1410)
-    tags_list = deque(TAGS_TO_DEQ*[0], TAGS_TO_DEQ)
+    tags_list = deque(TAGS_TO_DEQ * [0], TAGS_TO_DEQ)
     sleep(5)
     tags_cnt = 0
     while True:
@@ -136,7 +173,7 @@ def keep_tag(res_dict, event_list, screenshots):
         start = 0
         pos = -1
         for part in range(segments_n):
-            ch = template[:, start:start+wide, :]
+            ch = template[:, start:start + wide, :]
             res = define_color_new(ch)
             if np.array_equal(res, np.array([33, 237, 251])):
                 pos = part
@@ -157,8 +194,15 @@ def keep_tag(res_dict, event_list, screenshots):
 
 
 def run(res_dict, event_list):
+    """
+    Simulate key presses based on a specific condition.
+
+    Args:
+        res_dict (dict): Shared dictionary for storing the results.
+        event_list (dict): Shared dictionary for managing events.
+    """
     print(f"Process {current_process().name} started")
-    while not  event_list['success'].is_set() and not  event_list['final'].is_set():
+    while not event_list['success'].is_set() and not event_list['final'].is_set():
         if res_dict['run']:
             pg.keyDown('l')
             pg.keyDown('w')
@@ -166,6 +210,13 @@ def run(res_dict, event_list):
 
 
 def timing(res_dict, event_list):
+    """
+    Manage timing and set a timeout condition.
+
+    Args:
+        res_dict (dict): Shared dictionary for storing the results.
+        event_list (dict): Shared dictionary for managing events.
+    """
     print(f"Process {current_process().name} started")
     while True:
         if event_list['final'].is_set() or event_list['button'].is_set():
@@ -180,6 +231,14 @@ def timing(res_dict, event_list):
 
 
 def coordinator(res_dict, event_list, screenshots):
+    """
+    Coordinate the execution of different processes based on events.
+
+    Args:
+        res_dict (dict): Shared dictionary for storing the results.
+        event_list (dict): Shared dictionary for managing events.
+        screenshots (dict): Dictionary containing the screenshots.
+    """
     print(f"Process {current_process().name} started")
     while not event_list['success'].is_set():
         if event_list['button'].is_set():
@@ -195,8 +254,8 @@ def coordinator(res_dict, event_list, screenshots):
         while not event_list['timer'].is_set() and not event_list['success'].is_set():
             # print('coord2')
             if event_list['button'].is_set():
-               event_list['final'].set()
-               break
+                event_list['final'].set()
+                break
 
             res_dict['run'] = True
             res_dict['detect'] = True
@@ -207,41 +266,40 @@ def coordinator(res_dict, event_list, screenshots):
                 duck_and_f(res_dict)
                 res_dict['detected'] = False
                 event_list['detected'].clear()
+                sleep(1.5)
+                if event_list['success'].is_set() or event_list['final'].is_set() or event_list['button'].is_set():
+                    break
 
-            elif event_list['tag_in'].is_set():
-                event_list['keep_tag_center'].clear()
                 res_dict['run'] = False
-                stop()
                 res_dict['detect'] = False
-                look_around(res_dict, event_list)
-                find_tag_new(screenshots)
-                sleep(0.6)
-                find_tag_new(screenshots)
-                event_list['tag_in'].clear()
-            sleep(0.3)
-        if not event_list['success'].is_set():
-            res_dict['run'] = False
-            stop()
-            steps_on_timing()
-            find_tag_new(screenshots)
-            sleep(0.6)
-            find_tag_new(screenshots)
-    if not event_list['final'].is_set():
-        res_dict['run'] = False
-        stop()
-        event_list['keep_tag_center'].clear()
-        event_list['timer'].set()
-        event_list['final'].set()
 
-    event_list['final'].set()
-    event_list['success'].set()
-    event_list['timer'].set()
-    event_list['keep_tag_center'].clear()
+                sleep(1)
+                pg.press('f')
+
+        res_dict['run'] = False
+        res_dict['detect'] = False
+
+        sleep(1)
+        pg.press('f')
+        sleep(0.3)
     print(f"Process {current_process().name} finished")
 
 
-def main_search(button_event, screenshots, map_name):
+from multiprocessing import Process, Manager, Event
+import cv2
+import pyautogui as pg
+import time
+from time import sleep
 
+def main_search(button_event, screenshots, map_name):
+    """
+    Main function for searching and coordinating processes based on events.
+
+    Args:
+        button_event (Event): Event indicating the button press.
+        screenshots (dict): Dictionary containing the screenshots.
+        map_name (str): Name of the map being played.
+    """
     if not button_event.is_set():
         final_end_event = Event()
         success_event = Event()
@@ -270,6 +328,7 @@ def main_search(button_event, screenshots, map_name):
         find_tag_new(screenshots)
         sleep(0.6)
         find_tag_new(screenshots)
+
     if not button_event.is_set():
         processes = []
         detection_proc = Process(target=search_vehicle, args=(res_dict, event_list, screenshots, ), name='search_vehicle')
