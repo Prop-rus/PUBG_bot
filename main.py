@@ -87,6 +87,7 @@ def car_actions(button_event, screenshots):
     # actions on the maps, where car spawn places are not fixed. Not needed to implement yet
     pass
 
+
 def suicide(button_event, screenshots):
     # TODO actions for maps without vehicles
     #  and fixed loot such as Paramo
@@ -95,7 +96,7 @@ def suicide(button_event, screenshots):
 
 def ingame_acting(button_event, screenshots, queue):
     """
-    Perform in-game actions based on the current state.
+    Perform in-game actions based on the defined map.
 
     Args:
         button_event (multiprocessing.Event): Event to signal the detection of a button.
@@ -149,7 +150,7 @@ def take_screenshot_always(button_event, screenshots, queue):
 
     print("Screenshots started")
     while not button_event.is_set():
-        color, gray = take_screenshot() # Capture color and grayscale screenshots
+        color, gray = take_screenshot()  # Capture color and grayscale screenshots
         screenshots['color'] = color
         screenshots['gray'] = gray
         sleep(0.2)

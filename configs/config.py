@@ -1,8 +1,8 @@
-# from my_utils import rescale_w, rescale_h
-
 
 w, h = 2560, 1440
 # w, h = 1920, 1080
+
+
 def rescale_w(coord):
     '''
     initially all coordinates were figured out on 2K resolution.
@@ -10,12 +10,15 @@ def rescale_w(coord):
     '''
     return (w * coord) // 2560
 
+
 def rescale_h(coord):
     '''
     initially all coordinates were figured out on 2K resolution.
     this will rescale to another defind resolution
     '''
     return (h * coord) // 1440
+
+
 map_list = ['vikendi', 'erangel', 'miramar', 'taego', 'sanok', 'deston', 'karakin']
 
 maps_to_glide = {'deston': (rescale_w(1036), rescale_h(542)),
@@ -28,20 +31,20 @@ maps_to_glide = {'deston': (rescale_w(1036), rescale_h(542)),
                  }
 
 # destinations of min closure of the plane to target pont in px when bot has to jump
-maps_destinations = {'deston':{'short': rescale_w(300),
-                               'long': rescale_w(350)},
+maps_destinations = {'deston': {'short': rescale_w(300),
+                                'long': rescale_w(350)},
                      'vikendi': {'short': rescale_w(300),
-                                'long': rescale_w(350)},
+                                 'long': rescale_w(350)},
                      'erangel': {'short': rescale_w(300),
-                                'long': rescale_w(350)},
+                                 'long': rescale_w(350)},
                      'taego': {'short': rescale_w(300),
-                                'long': rescale_w(350)},
+                               'long': rescale_w(350)},
                      'miramar': {'short': rescale_w(300),
-                                'long': rescale_w(350)},
+                                 'long': rescale_w(350)},
                      'sanok': {'short': rescale_w(620),
-                                'long': rescale_w(740)},
+                               'long': rescale_w(740)},
                      'karakin': {'short': rescale_w(700),
-                                'long': rescale_w(1000)}
+                                 'long': rescale_w(1000)}
                      }
 
 # some maps are needed to point exact target place, such as boxes with loot on it
@@ -62,7 +65,7 @@ suicide_maps = ['paramo']
 
 # buttons int the menu, that are scaned as game finished
 buttons_to_click = ['start_game', 'go_lobby_cut', 'confirm_cut',
-                     'next_cut', 'finish_cut', 'reconnect_cut']
+                    'next_cut', 'finish_cut', 'reconnect_cut']
 
 # tags in the orientation board are different when plaing in team. So you have to switch to another screenshot
 tag = 'single'  # team or single

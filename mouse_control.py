@@ -1,20 +1,19 @@
-# Taken from ??? (unknown source)
 import ctypes
 import win32api
 import win32con
-from time import sleep
+
 
 class MouseControls:
     """It simulates the mouse"""
-    MOUSEEVENTF_MOVE = 0x0001 # mouse move
-    MOUSEEVENTF_LEFTDOWN = 0x0002 # left button down
-    MOUSEEVENTF_LEFTUP = 0x0004 # left button up
-    MOUSEEVENTF_RIGHTDOWN = 0x0008 # right button down
-    MOUSEEVENTF_RIGHTUP = 0x0010 # right button up
-    MOUSEEVENTF_MIDDLEDOWN = 0x0020 # middle button down
-    MOUSEEVENTF_MIDDLEUP = 0x0040 # middle button up
-    MOUSEEVENTF_WHEEL = 0x0800 # wheel button rolled
-    MOUSEEVENTF_ABSOLUTE = 0x8000 # absolute move
+    MOUSEEVENTF_MOVE = 0x0001  # mouse move
+    MOUSEEVENTF_LEFTDOWN = 0x0002  # left button down
+    MOUSEEVENTF_LEFTUP = 0x0004  # left button up
+    MOUSEEVENTF_RIGHTDOWN = 0x0008  # right button down
+    MOUSEEVENTF_RIGHTUP = 0x0010  # right button up
+    MOUSEEVENTF_MIDDLEDOWN = 0x0020  # middle button down
+    MOUSEEVENTF_MIDDLEUP = 0x0040  # middle button up
+    MOUSEEVENTF_WHEEL = 0x0800  # wheel button rolled
+    MOUSEEVENTF_ABSOLUTE = 0x8000  # absolute move
     SM_CXSCREEN = 0
     SM_CYSCREEN = 1
 
@@ -74,7 +73,7 @@ class MouseControls:
         """release a button of the mouse"""
         self.__do_event(self.__get_button_value(button_name, True), 0, 0, 0, 0)
 
-    def double_click (self):
+    def double_click(self):
         """Double click at the specifed placed"""
         for i in range(0, 1):
             self.click()
@@ -89,4 +88,3 @@ class MouseControls:
     def scroll_down(self, n):
         """Simulate scrolling down n clicks"""
         win32api.mouse_event(win32con.MOUSEEVENTF_WHEEL, 0, 0, -120, n)
-

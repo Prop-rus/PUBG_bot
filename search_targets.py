@@ -1,15 +1,15 @@
-from multiprocessing import Process, Event, Manager, current_process
-from time import sleep
-import pyautogui as pg
-import cv2
+from multiprocessing import current_process
 import torch
 import numpy as np
-
 from is_part_image import is_part
-from my_utils import find_tag_new, define_color_new, stop, look_around, steps_on_timing, rescale_w, rescale_h
-from collections import deque
-from configs.config import gliders_or_cars, w, h
+from my_utils import find_tag_new, define_color_new, rescale_w, rescale_h
+from configs.config import gliders_or_cars, w
 from mouse_control import MouseControls
+from multiprocessing import Process, Manager, Event
+import cv2
+import pyautogui as pg
+from time import sleep
+
 
 ms = MouseControls()
 
@@ -19,9 +19,9 @@ def search_vehicle(res_dict, event_list, screenshots, vehicle_classes=[0, 1, 2, 
     Search for vehicles in the screenshots using YOLOv5 model.
 
     Args:
-        res_dict (dict): Shared dictionary for storing the results.
-        event_list (dict): Shared dictionary for managing events.
-        screenshots (dict): Dictionary containing the screenshots.
+        res_dict (multiprocessing.Manager.dict): Shared dictionary for storing the results.
+        event_list (multiprocessing.Manager.dict): Shared dictionary for managing events.
+        screenshots (multiprocessing.Manager.dict): Shared dictionary for storing screenshots.
         vehicle_classes (list): List of vehicle classes to detect.
     """
     print(f"Process {current_process().name} started")
@@ -34,8 +34,7 @@ def search_vehicle(res_dict, event_list, screenshots, vehicle_classes=[0, 1, 2, 
     model.conf_thres = 0.6
     model.iou_thres = 0.6
     model.classes = vehicle_classes  # car, motorcycle, bus, truck
-    cur_x, cur_y = w // 2, h // 2
-    success = False
+    cur_x = w // 2
     success_cnt = 0
     while not event_list['success'].is_set():
         if not res_dict['detect']:
@@ -54,7 +53,7 @@ def search_vehicle(res_dict, event_list, screenshots, vehicle_classes=[0, 1, 2, 
         confidence = confidence[ind_cars]
         if len(labels) > 0 and confidence > 0.75:
             row = cord[0]
-            x1, y1, x2, y2 = int(row[0] * w), int(row[1] * h), int(row[2] * w), int(row[3] * h)
+            x1, x2 = int(row[0] * w), int(row[2] * w)
             pers_x_cent = x1 + (abs(x2 - x1) // 2)
 
             success_cnt += 1
@@ -77,8 +76,8 @@ def always_f(res_dict, event_list):
     Continuously press the 'f' key.
 
     Args:
-        res_dict (dict): Shared dictionary for storing the results.
-        event_list (dict): Shared dictionary for managing events.
+        res_dict (multiprocessing.Manager.dict): Shared dictionary for storing the results.
+        event_list (multiprocessing.Manager.dict): Shared dictionary for managing events.
     """
     print(f"Process {current_process().name} started")
     while not event_list['success'].is_set():
@@ -89,12 +88,12 @@ def always_f(res_dict, event_list):
 
 def press_f(res_dict, event_list, screenshots, map_name):
     """
-    Press the 'f' key when a specific condition is met.
+    define the 'F' button during searching vehicles or loot.
 
     Args:
-        res_dict (dict): Shared dictionary for storing the results.
-        event_list (dict): Shared dictionary for managing events.
-        screenshots (dict): Dictionary containing the screenshots.
+        res_dict (multiprocessing.Manager.dict): Shared dictionary for storing the results.
+        event_list (multiprocessing.Manager.dict): Shared dictionary for managing events.
+        screenshots (multiprocessing.Manager.dict): Shared dictionary for storing screenshots.
         map_name (str): Name of the map being played.
     """
     print(f"Process {current_process().name} started")
@@ -110,7 +109,7 @@ def press_f(res_dict, event_list, screenshots, map_name):
     # fake_template_1 = rescale_template(fake_template_1)
 
     while not found_f:
-        if event_list['final'].is_set() or event_list['button'].is_set() :
+        if event_list['final'].is_set() or event_list['button'].is_set():
             break
         screenshot = screenshots['color']
         im_center = screenshot[rescale_w(810):rescale_w(865), rescale_h(1420):rescale_h(1534), 0]
@@ -131,7 +130,7 @@ def press_f(res_dict, event_list, screenshots, map_name):
 
 def duck_and_f(res_dict):
     """
-    Press and release the 'ctrl' key twice.
+    When the vehicle is detected, bot goes after duck to keep more image on the screen.
 
     Args:
         res_dict (dict): Shared dictionary for storing the results.
@@ -145,19 +144,17 @@ def duck_and_f(res_dict):
 
 def keep_tag(res_dict, event_list, screenshots):
     """
-    Monitor the presence of a tag in a specific region of the screen.
+    Monitor the presence of a tag in a compass area to detect that bot run through the target.
 
     Args:
-        res_dict (dict): Shared dictionary for storing the results.
-        event_list (dict): Shared dictionary for managing events.
-        screenshots (dict): Dictionary containing the screenshots.
+        res_dict (multiprocessing.Manager.dict): Shared dictionary for storing the results.
+        event_list (multiprocessing.Manager.dict): Shared dictionary for managing events.
+        screenshots (multiprocessing.Manager.dict): Shared dictionary for storing screenshots.
     """
     print(f"Process {current_process().name} started")
     TAGS_TO_DEQ = 3
-    tag_in = True
 
     x1_close, x2_close, y1_close, y2_close = rescale_w(28), rescale_w(51), rescale_h(1110), rescale_h(1410)
-    tags_list = deque(TAGS_TO_DEQ * [0], TAGS_TO_DEQ)
     sleep(5)
     tags_cnt = 0
     while True:
@@ -195,11 +192,11 @@ def keep_tag(res_dict, event_list, screenshots):
 
 def run(res_dict, event_list):
     """
-    Simulate key presses based on a specific condition.
+    Keep running while not signal is set
 
     Args:
-        res_dict (dict): Shared dictionary for storing the results.
-        event_list (dict): Shared dictionary for managing events.
+        res_dict (multiprocessing.Manager.dict): Shared dictionary for storing the results.
+        event_list (multiprocessing.Manager.dict): Shared dictionary for managing events.
     """
     print(f"Process {current_process().name} started")
     while not event_list['success'].is_set() and not event_list['final'].is_set():
@@ -284,12 +281,6 @@ def coordinator(res_dict, event_list, screenshots):
         sleep(0.3)
     print(f"Process {current_process().name} finished")
 
-
-from multiprocessing import Process, Manager, Event
-import cv2
-import pyautogui as pg
-import time
-from time import sleep
 
 def main_search(button_event, screenshots, map_name):
     """

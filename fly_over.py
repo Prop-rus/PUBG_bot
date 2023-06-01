@@ -10,7 +10,7 @@ from configs.config import maps_destinations
 
 def forward_and_detect_tag(event_list, mean_dist, map_name):
     """
-    Move forward and detect tags during the flight.
+    Move forward in the way depending on the map and destination.
 
     Args:
         event_list (dict): Dictionary containing event flags.
@@ -59,7 +59,7 @@ def forward_and_detect_tag(event_list, mean_dist, map_name):
 
 def detect_ground(event_list, screenshots):
     """
-    Detect whether the character is on the ground or in the water.
+    Detect whether the character is on the ground or in the water basing on the icon.
 
     Args:
         event_list (dict): Dictionary containing event flags.
@@ -95,7 +95,7 @@ def detect_ground(event_list, screenshots):
 
 def fly_over(screenshots, mean_dist, map_name, button_event):
     """
-    Perform flying actions during the flight.
+    Perform flying actions from plane to the ground.
 
     Args:
         screenshots (multiprocessing.Manager.dict): Shared dictionary for storing screenshots.

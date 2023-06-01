@@ -17,7 +17,7 @@ ms = MouseControls()
 
 def mark_glider(map_name):
     """
-    Mark the glider on the map.
+    Mark the target vehicle on the map.
 
     Args:
         map_name (str): Name of the map.
@@ -50,13 +50,13 @@ def mark_glider(map_name):
 
 def wait_and_jump(x, y, map_name, screenshots):
     """
-    Wait for the glider to reach the desired distance and initiate the jump.
+    Wait for the target coordinates to reach the desired distance and initiate the jump.
 
     Args:
-        x (int): X-coordinate of the glider marker.
-        y (int): Y-coordinate of the glider marker.
+        x (int): X-coordinate of the marker.
+        y (int): Y-coordinate of the marker.
         map_name (str): Name of the map.
-        screenshots (dict): Dictionary for storing screenshots.
+        screenshots (multiprocessing.Manager.dict): Shared dictionary for storing screenshots
 
     Returns:
         float: Mean distance to the destination.
@@ -77,14 +77,14 @@ def wait_and_jump(x, y, map_name, screenshots):
         while too_far:
             print('wait and jump')
             _, cv_imageObj1 = take_screenshot(region=(rescale_w(565),
-                                                     rescale_h(0),
-                                                     rescale_w(1425),
-                                                     rescale_h(1440)))
+                                                      rescale_h(0),
+                                                      rescale_w(1425),
+                                                      rescale_h(1440)))
             sleep(0.2)
             _, cv_imageObj2 = take_screenshot(region=(rescale_w(565),
-                                                     rescale_h(0),
-                                                     rescale_w(1425),
-                                                     rescale_h(1440)))
+                                                      rescale_h(0),
+                                                      rescale_w(1425),
+                                                      rescale_h(1440)))
 
             diff = cv2.absdiff(cv_imageObj1, cv_imageObj2)
             threshold = cv2.threshold(diff, 25, 255, cv2.THRESH_BINARY)[1]
@@ -130,7 +130,7 @@ def glider_actions(map_name, button_event, screenshots):
     Args:
         map_name (str): Name of the map.
         button_event (multiprocessing.Event): Event to signal the detection of a button.
-        screenshots (dict): Dictionary for storing screenshots.
+        screenshots (multiprocessing.Manager.dict): Shared dictionary for storing screenshots
 
     Returns:
         None

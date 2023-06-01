@@ -57,7 +57,7 @@ def rescale_template(template):
 
 def find_tag_new(screenshots):
     """
-    Find the tag in a screenshot using template matching.
+    Find the tag in the compass area at top of the image.
 
     Args:
         screenshots (dict): A dictionary containing color and gray screenshots.
@@ -110,7 +110,7 @@ def take_screenshot(region=None):
 
 def press_for_long(button, delay=0.3):
     """
-    Simulate pressing and holding a keyboard button.
+    Simulate pressing and holding a keyboard button with delay on keep pressing.
 
     Args:
         button (str): The button to press.
@@ -129,7 +129,7 @@ def define_map(screenshots):
     Find the current map in the screenshots using template matching.
 
     Args:
-        screenshots (dict): A dictionary containing color and gray screenshots.
+        screenshots (multiprocessing.Manager.dict): Shared dictionary for storing screenshots
 
     Returns:
         str: The name of the detected map, or None if no map is detected.
@@ -150,7 +150,7 @@ def search_f_key(screenshots):
     Search for the 'F' key in a region of the screenshot using template matching.
 
     Args:
-        screenshots (dict): A dictionary containing color and gray screenshots.
+        screenshots (multiprocessing.Manager.dict): Shared dictionary for storing screenshots
 
     Returns:
         bool: True if the 'F' key is found, False otherwise.
@@ -185,7 +185,7 @@ def define_color_new(image):
 
 def stop():
     """
-    Release the 'l' and 'w' keys.
+    Command to stop running.
 
     Returns:
         None
@@ -228,7 +228,7 @@ def look_around(res_dict, event_list):
 
 def steps_on_timing():
     """
-    Perform a sequence of steps on timing.
+    Perform a sequence of steps when no result is reached on timeout.
 
     Returns:
         None
