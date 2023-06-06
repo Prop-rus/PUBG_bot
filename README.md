@@ -51,8 +51,8 @@ To use the PUBG bot, follow these steps:
 
 1. Ensure that Python is installed on your system.
 2. Install the necessary dependencies by running pip install -r requirements.txt.
-3. Download and extract the archive containing the pre-trained PyTorch YOLOv5 model and screenshots.
-4. Launch the bot script.
+3. Download and extract the archive containing the pre-trained PyTorch YOLOv5 model and screenshots by the link https://drive.google.com/file/d/1vBmCYuLozMcIXTTTamSWD3_2TdedWP8t/view?usp=sharing.
+4. Launch the bot script "main.py".
 5. Configure the desired settings, such as map preferences, target location criteria, and advanced abilities.
 6. Let the bot automate the gameplay, monitor its actions, and enjoy an enhanced PUBG experience.
 
@@ -69,3 +69,18 @@ Please note that the bot's compatibility and support for future game versions ma
 
 ## Acknowledgments
 Special thanks to the developers of PUBG and the Python community for providing the necessary resources and tools to create this bot.
+
+### MIT License
+
+Copyright (c) 2023 Prop-rus
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
