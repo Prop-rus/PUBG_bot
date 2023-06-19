@@ -1,6 +1,12 @@
 # PUBG Bot
 This program is a Python-based bot designed for the game PlayerUnknown's Battlegrounds (PUBG). The bot is capable of automating various tasks to earn some game bonuses.
 
+_______________________________
+## 24.1 version branch
+This branch is the adoptation of bot to new opportunity ov 24.1 version, which allows to earn bonuses only by choosing loot in supply box.
+This opportunity most likely to be closed in the future. If it is not available any more, use master branch.
+-------------------------------
+
 ## Before You Begin
 Before using this project, please take note of the following:
 
