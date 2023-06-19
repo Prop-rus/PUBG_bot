@@ -7,15 +7,14 @@ from statistics import mean
 from configs.config import maps_to_glide, TAKE_LAST_N_MEASUERS
 from my_utils import take_screenshot, press_for_long, find_tag_new, rescale_w, rescale_h
 from fly_over import fly_over
-from search_targets import main_search
 from collections import deque
-from configs.config import maps_destinations, scrolled_coordinates
+from configs.config import maps_destinations
 from mouse_control import MouseControls
 
 ms = MouseControls()
 
 
-def mark_glider(map_name):
+def mark_land_point(map_name):
     """
     Mark the target vehicle on the map.
 
@@ -29,22 +28,8 @@ def mark_glider(map_name):
     x, y = maps_to_glide[map_name]
     x = rescale_w(x)
     y = rescale_h(y)
-    if map_name in scrolled_coordinates.keys():
-        new_x, new_y = scrolled_coordinates[map_name]
-        new_x = rescale_w(new_x)
-        new_y = rescale_h(new_y)
-        ms.move(x, y)
-        sleep(0.5)
-        for _ in range(4):
-            ms.scroll_up(12)
-        sleep(0.5)
-        pg.rightClick(new_x, new_y)
-        sleep(0.5)
-        for _ in range(4):
-            ms.scroll_down(12)
+    pg.rightClick(x, y)
 
-    else:
-        pg.rightClick(x, y)
     return x, y
 
 
@@ -123,7 +108,20 @@ def wait_and_jump(x, y, map_name, screenshots):
     return mean_dest
 
 
-def glider_actions(map_name, button_event, screenshots):
+def loot_from_box():
+    pg.press('i')
+    sleep(0.4)
+    pg.rightClick(rescale_w(642), rescale_h(195), duration=1)
+    sleep(0.4)
+    pg.leftClick(rescale_w(1276), rescale_h(730), duration=1)
+    sleep(0.4)
+    pg.leftClick(rescale_w(1276), rescale_h(1157), duration=1)
+    sleep(5)
+    pg.press('x')
+
+
+
+def loot_actions(map_name, button_event, screenshots):
     """
     Perform glider actions, including marking the glider, waiting, jumping, flying over, and searching for targets.
 
@@ -136,9 +134,9 @@ def glider_actions(map_name, button_event, screenshots):
         None
     """
     print('start glider actions')
-    x, y = mark_glider(map_name)
+    x, y = mark_land_point(map_name)
 
     mean_dist = wait_and_jump(x, y, map_name, screenshots)
 
     fly_over(screenshots, mean_dist, map_name, button_event)
-    main_search(button_event, screenshots, map_name)
+    loot_from_box()

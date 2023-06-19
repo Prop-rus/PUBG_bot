@@ -19,15 +19,16 @@ def rescale_h(coord):
     return (h * coord) // 1440
 
 
-map_list = ['vikendi', 'erangel', 'miramar', 'taego', 'sanok', 'deston', 'karakin']
+map_list = ['vikendi', 'erangel', 'miramar', 'taego', 'sanok', 'deston', 'karakin', 'paramo']
 
-maps_to_glide = {'deston': (rescale_w(1036), rescale_h(542)),
-                 'vikendi': (rescale_w(1312), rescale_h(777)),
-                 'erangel': (rescale_w(1472), rescale_h(812)),
-                 'taego': (rescale_w(1274), rescale_h(844)),
-                 'miramar': (rescale_w(929), rescale_h(720)),
-                 'sanok': (rescale_w(1516), rescale_h(975)),
-                 'karakin': (rescale_w(1165), rescale_h(760))
+maps_to_glide = {'deston': (rescale_w(1200), rescale_h(730)),
+                 'vikendi': (rescale_w(1282), rescale_h(640)),
+                 'erangel': (rescale_w(1347), rescale_h(662)),
+                 'taego': (rescale_w(1333), rescale_h(783)),
+                 'miramar': (rescale_w(1265), rescale_h(629)),
+                 'sanok': (rescale_w(1395), rescale_h(800)),
+                 'karakin': (rescale_w(1338), rescale_h(789)),
+                 'paramo': (rescale_w(1167), rescale_h(856))
                  }
 
 # destinations of min closure of the plane to target pont in px when bot has to jump
@@ -47,30 +48,14 @@ maps_destinations = {'deston': {'short': rescale_w(300),
                                  'long': rescale_w(1000)}
                      }
 
-# some maps are needed to point exact target place, such as boxes with loot on it
-scrolled_coordinates = {'sanok': (rescale_w(1549), rescale_h(980))}
-
-# targets on different maps are different too
-gliders_or_cars = {'taego': 'glider',
-                   'vikendi': 'glider',
-                   'erangel': 'car',
-                   'miramar': 'car',
-                   'deston': 'car',
-                   'sanok': 'car',
-                   'karakin': 'car'
-                   }
-
-# just do nothing maps
-suicide_maps = ['paramo']
 
 # buttons int the menu, that are scaned as game finished
 buttons_to_click = ['start_game', 'go_lobby_cut', 'confirm_cut',
-                    'next_cut', 'finish_cut', 'reconnect_cut']
+                     'next_cut', 'finish_cut', 'reconnect_cut', 'ok_cut',
+                    'continue_cut', 'reload_lobby_cut']
 
 # tags in the orientation board are different when plaing in team. So you have to switch to another screenshot
 tag = 'single'  # team or single
 
 TAKE_LAST_N_MEASUERS = 15
 
-# steps to move when timing finished
-steps_right, steps_back = 5, 2

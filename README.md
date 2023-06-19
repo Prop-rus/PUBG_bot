@@ -61,7 +61,7 @@ To use the PUBG bot, follow these steps:
     - running pip install -r requirements.txt.
     - installing openCV library for python https://docs.opencv.org/4.x/d5/de5/tutorial_py_setup_in_windows.html
     - installing pyTorch library with CUDA https://pytorch.org/get-started/locally/
-3. Download and extract the archive containing the pre-trained PyTorch YOLOv5 model and screenshots by the link https://drive.google.com/file/d/1vBmCYuLozMcIXTTTamSWD3_2TdedWP8t/view?usp=sharing.
+3. Download and extract the archive containing the pre-trained PyTorch YOLOv5 model and screenshots by the link https://drive.google.com/file/d/1lN8fdumG0wdORXCtWOYs2AbqDrgVVZmj/view?usp=sharing.
 4. Launch the bot script "main.py".
 5. Configure the desired settings, such as map preferences, target location criteria, and advanced abilities.
 6. Let the bot automate the gameplay, monitor its actions, and enjoy an enhanced PUBG experience.

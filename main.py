@@ -8,7 +8,7 @@ from logging.handlers import QueueHandler
 from configs.config import buttons_to_click, maps_to_glide
 from is_part_image import is_part
 from mouse_control import MouseControls
-from glider_actions import glider_actions
+from glider_actions import loot_actions
 from my_utils import search_f_key, define_map, take_screenshot, rescale_w, rescale_h
 
 
@@ -85,17 +85,6 @@ def detect_buttons(button_event, screenshots, queue):
     print("Buttons finished")
 
 
-def car_actions(button_event, screenshots):
-    # actions on the maps, where car spawn places are not fixed. Not needed to implement yet
-    pass
-
-
-def suicide(button_event, screenshots):
-    # TODO actions for maps without vehicles
-    #  and fixed loot such as Paramo
-    pass
-
-
 def ingame_acting(button_event, screenshots, queue):
     """
     Perform in-game actions based on the defined map.
@@ -121,13 +110,10 @@ def ingame_acting(button_event, screenshots, queue):
     if not button_event.is_set():
         map_name = define_map(screenshots)  # Determine the map name
         print(map_name)
-        if map_name is not None and not button_event.is_set():
+        if not button_event.is_set():
             if map_name in maps_to_glide.keys() and not button_event.is_set():
-                glider_actions(map_name, button_event, screenshots)  # Perform glider actions
-            else:
-                car_actions(button_event, screenshots)  # Perform car actions
-        else:
-            suicide(button_event, screenshots)  # Perform suicide action
+                loot_actions(map_name, button_event, screenshots)  # Perform glider actions
+
     logger.info(f'Child {process.name} done.')
     print('In-game finished')
 
