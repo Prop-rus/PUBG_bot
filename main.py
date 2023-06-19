@@ -69,7 +69,9 @@ def detect_buttons(button_event, screenshots, queue):
                     sleep(0.5)
                     for _ in range(2):
                         pg.leftClick(rescale_w(240), rescale_h(1400), duration=0.3)
-
+                if but == 'reload_lobby_cut':
+                    pg.leftClick(rescale_w(408), rescale_h(862), duration=1)
+                    continue
                 print('Button:', but, 'Center:', center)
                 print('Button click:', but)
                 pg.leftClick(center[0], center[1], duration=1)  # Click on the button

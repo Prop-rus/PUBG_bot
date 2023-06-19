@@ -1,6 +1,13 @@
 # PUBG Bot
 This program is a Python-based bot designed for the game PlayerUnknown's Battlegrounds (PUBG). The bot is capable of automating various tasks to earn some game bonuses.
 
+## Before You Begin
+Before using this project, please take note of the following:
+
+- This project is intended for individuals who have at least a basic understanding of Python programming language.
+- You should be capable of independently installing the necessary dependencies, such as OpenCV and PyTorch, on a Windows operating system.
+
+To ensure a smooth experience with the PUBG bot, please make sure you meet the prerequisites and have the required knowledge and skills. If you are new to Python or need assistance with installing the dependencies, there are various online resources, tutorials, and forums available to help you get started.
 ## Background
 In the game PUBG, players are rewarded with additional bonuses and events for spending a significant amount of time in the game each day. However, simply launching matches and being AFK (Away From Keyboard) will not earn you Battle Points (BP) and Survivor Pass experience at the end of the match. To receive these rewards, players must perform at least one action, such as picking up an item or getting into any vehicle. By completing these actions, the game recognizes the player as active and credits them with bonuses.
 
@@ -50,7 +57,10 @@ It is strongly advised to exercise caution and discretion when using the bot to 
 To use the PUBG bot, follow these steps:
 
 1. Ensure that Python is installed on your system.
-2. Install the necessary dependencies by running pip install -r requirements.txt.
+2. Install the necessary dependencies by 
+    - running pip install -r requirements.txt.
+    - installing openCV library for python https://docs.opencv.org/4.x/d5/de5/tutorial_py_setup_in_windows.html
+    - installing pyTorch library with CUDA https://pytorch.org/get-started/locally/
 3. Download and extract the archive containing the pre-trained PyTorch YOLOv5 model and screenshots by the link https://drive.google.com/file/d/1vBmCYuLozMcIXTTTamSWD3_2TdedWP8t/view?usp=sharing.
 4. Launch the bot script "main.py".
 5. Configure the desired settings, such as map preferences, target location criteria, and advanced abilities.
