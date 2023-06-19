@@ -1,5 +1,12 @@
 # PUBG Bot
 This program is a Python-based bot designed for the game PlayerUnknown's Battlegrounds (PUBG). The bot is capable of automating various tasks to earn some game bonuses.
+_________________________________________
+## VERSIONS
+in PUBG 24.1 the new supply box was presented. Using it allows to get bonuses without looting or getting into the vihicles.
+It is most likely to be abonded in the future versions, but if it is still available you can use script from 'supply_loot_box' branch.
+In that branch it is no needed to install torch (but openCV is still needed)
+____________________________________________
+
 
 ## Before You Begin
 Before using this project, please take note of the following:
