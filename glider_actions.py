@@ -117,6 +117,8 @@ def loot_from_box():
     sleep(0.4)
     pg.leftClick(rescale_w(1276), rescale_h(1157), duration=1)
     sleep(5)
+    pg.press('i')
+    sleep(0.4)
     pg.press('x')
 
 

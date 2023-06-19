@@ -74,7 +74,7 @@ def detect_ground(event_list, screenshots):
         cv_imageObj = screenshots['gray']
         template = cv2.imread(r'screenshots\cut\underwater_cut.png', 0)
         # template = rescale_template(template)
-        is_there, center = is_part(cv_imageObj, template, 0.9)
+        is_there, center = is_part(cv_imageObj, template, 0.95)
         if is_there:
             print('water')
             pg.keyDown('space')
@@ -85,7 +85,7 @@ def detect_ground(event_list, screenshots):
 
         template = cv2.imread(r'screenshots\cut\stand_cut.png', 0)
         # template = rescale_template(template)
-        is_there, center = is_part(cv_imageObj, template, 0.9)
+        is_there, center = is_part(cv_imageObj, template, 0.95)
         if is_there:
             print('ground')
             event_list['ground'].set()
