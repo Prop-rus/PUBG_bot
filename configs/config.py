@@ -65,7 +65,8 @@ suicide_maps = ['paramo']
 
 # buttons int the menu, that are scaned as game finished
 buttons_to_click = ['start_game', 'go_lobby_cut', 'confirm_cut',
-                    'next_cut', 'finish_cut', 'reconnect_cut']
+                     'next_cut', 'finish_cut', 'reconnect_cut', 'ok_cut',
+                    'continue_cut', 'reload_lobby_cut']
 
 # tags in the orientation board are different when plaing in team. So you have to switch to another screenshot
 tag = 'single'  # team or single
